@@ -1,6 +1,7 @@
 package com.happyshop.dao;
 
 import com.happyshop.pojo.Cart;
+import org.apache.ibatis.annotations.Param;
 
 public interface CartMapper {
     int deleteByPrimaryKey(Integer id);

@@ -1,5 +1,6 @@
 package com.happyshop.service;
 
+import com.github.pagehelper.PageInfo;
 import com.happyshop.common.ServerResponse;
 import com.happyshop.pojo.Product;
 
@@ -13,4 +14,8 @@ public interface IProductService {
     ServerResponse setSaleStatus(Integer productId,Integer status);
 
     ServerResponse manageProductDetail(Integer productId);
+
+    ServerResponse<PageInfo> getProductList(int pageNum, int pageSize);
+
+    ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize);
 }

@@ -1,5 +1,8 @@
 package com.happyshop.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.happyshop.common.ResponseCode;
 import com.happyshop.common.ServerResponse;
 import com.happyshop.dao.CategoryMapper;
@@ -9,9 +12,12 @@ import com.happyshop.service.IProductService;
 import com.happyshop.util.DateTimeUtil;
 import com.happyshop.util.PropertiesUtil;
 import com.happyshop.vo.ProductDetailVo;
+import com.happyshop.vo.ProductListVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/21.
@@ -77,6 +83,38 @@ public class ProductServiceImpl implements IProductService {
         return  ServerResponse.createByErrorMessage("产品已下架或者删除");
     }
 
+    public ServerResponse<PageInfo> getProductList(int pageNum,int pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        PageInfo pageInfo=new PageInfo();
+        List<Product> productList = productMapper.selectList();
+
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product productItem : productList){
+            ProductListVo productListVo = assembleProductListVo(productItem);
+            productListVoList.add(productListVo);
+        }
+        PageInfo pageResult = new PageInfo(productListVoList);
+        pageResult.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageResult);
+
+    }
+
+    public ServerResponse<PageInfo> searchProduct(String productName,Integer productId,int pageNum,int pageSize){
+        PageHelper.startPage(pageNum,pageSize);
+        if(StringUtils.isNotBlank(productName)){//如果不为空
+            productName = new StringBuilder().append("%").append(productName).append("%").toString();//添加模糊搜索字段
+        }
+        List<Product> productList = productMapper.selectByNameAndProductId(productName,productId);
+        List<ProductListVo> productListVoList = Lists.newArrayList();
+        for(Product productItem : productList){
+            ProductListVo productListVo = assembleProductListVo(productItem);
+            productListVoList.add(productListVo);
+        }
+        PageInfo pageResult = new PageInfo(productList);
+        pageResult.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageResult);
+    }
+
     /**
      * 将produce转换为ProductDetailVo
      * @param product
@@ -100,5 +138,23 @@ public class ProductServiceImpl implements IProductService {
         productDetailVo.setCreateTime(DateTimeUtil.dateToStr(product.getCreateTime()));
         productDetailVo.setUpdateTime(DateTimeUtil.dateToStr(product.getUpdateTime()));
         return productDetailVo;
+    }
+
+    /**
+     * 将product转换为ProductListVo
+     * @param product
+     * @return
+     */
+    private ProductListVo assembleProductListVo(Product product){
+        ProductListVo productListVo = new ProductListVo();
+        productListVo.setId(product.getId());
+        productListVo.setName(product.getName());
+        productListVo.setCategoryId(product.getCategoryId());
+        productListVo.setImageHost(PropertiesUtil.getProperty("ftp.server.http.prefix","http://img.happymmall.com/"));
+        productListVo.setMainImage(product.getMainImage());
+        productListVo.setPrice(product.getPrice());
+        productListVo.setSubtitle(product.getSubtitle());
+        productListVo.setStatus(product.getStatus());
+        return productListVo;
     }
 }

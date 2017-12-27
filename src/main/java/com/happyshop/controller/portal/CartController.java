@@ -103,4 +103,66 @@ public class CartController {
         return iCartService.selectOrUnSelect(user.getId(),null,Const.Cart.CHECKED);
     }
 
+    /**
+     * 取消全选
+     * @param session
+     * @return
+     */
+    @RequestMapping("un_select_all.do")
+    @ResponseBody
+    public ServerResponse<CartVo> unSelectAll(HttpSession session){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.selectOrUnSelect(user.getId(),null,Const.Cart.UN_CHECKED);
+    }
+
+    /**
+     * 勾选一个
+     * @param session
+     * @param productId
+     * @return
+     */
+    @RequestMapping("select.do")
+    @ResponseBody
+    public ServerResponse<CartVo> select(HttpSession session,Integer productId){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.selectOrUnSelect(user.getId(),productId,Const.Cart.CHECKED);
+    }
+
+    /**
+     * 取消一个
+     * @param session
+     * @param productId
+     * @return
+     */
+    @RequestMapping("un_select.do")
+    @ResponseBody
+    public ServerResponse<CartVo> unSelect(HttpSession session,Integer productId){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),ResponseCode.NEED_LOGIN.getDesc());
+        }
+        return iCartService.selectOrUnSelect(user.getId(),productId,Const.Cart.UN_CHECKED);
+    }
+
+    /**
+     * 购物车数量
+     * @param session
+     * @return
+     */
+    @RequestMapping("get_cart_product_count.do")
+    @ResponseBody
+    public ServerResponse<Integer> getCartProductCount(HttpSession session){
+        User user = (User)session.getAttribute(Const.CURRENT_USER);
+        if(user ==null){
+            return ServerResponse.createBySuccess(0);
+        }
+        return iCartService.getCartProductCount(user.getId());
+    }
+
 }

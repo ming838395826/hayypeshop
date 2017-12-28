@@ -136,7 +136,7 @@
   </select>
 
   <delete id="deleteByUserIdProductIds" parameterType="map">
-    delete from mmall_cart
+    delete from happyshop_cart
     where user_id = #{userId}
     <if test="productIdList != null">
       and product_id in
@@ -147,7 +147,7 @@
   </delete>
 
   <update id="checkedOrUncheckedProduct" parameterType="map">
-    UPDATE  mmall_cart
+    UPDATE  happyshop_cart
     set checked = #{checked},
     update_time = now()
     where user_id = #{userId}
@@ -157,6 +157,14 @@
   </update>
 
   <select id="selectCartProductCount" parameterType="int" resultType="int">
-    select IFNULL(sum(quantity),0) as count from mmall_cart where user_id = #{userId}
+    select IFNULL(sum(quantity),0) as count from happyshop_cart where user_id = #{userId}
+  </select>
+
+  <select id="selectCheckedCartByUserId" parameterType="int" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from happyshop_cart
+    where user_id = #{userId}
+    and checked = 1
   </select>
 </mapper>

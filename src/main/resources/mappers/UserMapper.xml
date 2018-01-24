@@ -163,7 +163,7 @@
   <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
   SELECT
   <include refid="Base_Column_List"/>
-  FROM happyshop_user where username = #{username} and password = #{password}
+  FROM happyshop_user where username = #{username} and password = #{md5Password}
   </select>
 
   <select id="selectQuestionByUsername" resultType="string" parameterType="string">

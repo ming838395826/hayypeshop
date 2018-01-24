@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by Administrator on 2017/12/20.
  */
 @Controller
-@RequestMapping("/manage/product")
+@RequestMapping("/manage/product/")
 public class ProductManageController {
 
     @Autowired
@@ -113,7 +113,7 @@ public class ProductManageController {
      */
     @RequestMapping("list.do")
     @ResponseBody
-    public ServerResponse getList(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1") int pageNum, @RequestParam(value = "pageSize",defaultValue = "10") int pageSize){
+    public ServerResponse getList(HttpSession session, @RequestParam(value = "page",defaultValue = "1") int pageNum, @RequestParam(value = "rows",defaultValue = "10") int pageSize){
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录,请登录管理员");

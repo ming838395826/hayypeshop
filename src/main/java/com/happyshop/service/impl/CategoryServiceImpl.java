@@ -2,6 +2,7 @@ package com.happyshop.service.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.happyshop.common.EasyUiTreeResponse;
 import com.happyshop.common.ServerResponse;
 import com.happyshop.dao.CategoryMapper;
 import com.happyshop.pojo.Category;
@@ -56,12 +57,19 @@ public class CategoryServiceImpl implements ICategoryService {
         return ServerResponse.createByErrorMessage("更新品类名字失败");
     }
 
-    public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId){
+    public List<EasyUiTreeResponse> getChildrenParallelCategory(Integer categoryId){
         List<Category> categoryList = categoryMapper.selectCategoryChildrenByParentId(categoryId);
         if(CollectionUtils.isEmpty(categoryList)){
             logger.info("未找到当前分类的子分类");
         }
-        return ServerResponse.createBySuccess(categoryList);
+        List<EasyUiTreeResponse> list=Lists.newArrayList();
+        for(int i=0;i<categoryList.size();i++){
+            EasyUiTreeResponse item=new EasyUiTreeResponse();
+            item.setId(categoryList.get(i).getId());
+            item.setText(categoryList.get(i).getName());
+            item.setState(categoryList.get(i).getParentId()==0?"closed":"open");
+        }
+        return list;
     }
 
     /**

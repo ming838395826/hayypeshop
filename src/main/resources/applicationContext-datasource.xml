@@ -62,6 +62,7 @@
     <!--数据库工厂-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
+        <!--加载mybatis配置文件-->
         <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
 
         <!-- mybatis分页插件 -->
@@ -79,7 +80,7 @@
 
     </bean>
 
-    <!--扫描dao层-->
+    <!--mybatis扫描dao层-->
     <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.happyshop.dao"/>
     </bean>

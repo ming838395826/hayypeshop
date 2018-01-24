@@ -1,6 +1,7 @@
 package com.happyshop.controller.backend;
 
 import com.happyshop.common.Const;
+import com.happyshop.common.EasyUiTreeResponse;
 import com.happyshop.common.ResponseCode;
 import com.happyshop.common.ServerResponse;
 import com.happyshop.pojo.User;
@@ -14,12 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/12/19.
  */
 @Controller
-@RequestMapping("/manage/category")
+@RequestMapping("/manage/category/")
 public class CategoryManageController {
 
     @Autowired
@@ -84,16 +87,16 @@ public class CategoryManageController {
      */
     @RequestMapping("get_category.do")
     @ResponseBody
-    public ServerResponse getChildrenParallelCategory(HttpSession session,@RequestParam(value = "categoryId" ,defaultValue = "0") Integer categoryId){
+    public List<EasyUiTreeResponse> getChildrenParallelCategory(HttpSession session, @RequestParam(value = "id" ,defaultValue = "0") Integer categoryId){
         User user = (User)session.getAttribute(Const.CURRENT_USER);
         if(user == null){
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录,请登录");
+            return new ArrayList<EasyUiTreeResponse>();
         }
         if(iUserService.checkAdminRole(user).isSuccess()){
             //查询子节点的category信息,并且不递归,保持平级
             return iCategoryService.getChildrenParallelCategory(categoryId);
         }else{
-            return ServerResponse.createByErrorMessage("无权限操作,需要管理员权限");
+            return new ArrayList<EasyUiTreeResponse>();
         }
     }
 
@@ -119,4 +122,5 @@ public class CategoryManageController {
             return ServerResponse.createByErrorMessage("无权限操作,需要管理员权限");
         }
     }
+
 }

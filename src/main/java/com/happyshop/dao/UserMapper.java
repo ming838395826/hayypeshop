@@ -22,7 +22,7 @@ public interface UserMapper {
 
     int checkEmail(String email);
 
-    User selectLogin(String username, String md5Password);
+    User selectLogin(@Param("username")String username, @Param("md5Password")String md5Password);
 
     String selectQuestionByUsername(String username);
 

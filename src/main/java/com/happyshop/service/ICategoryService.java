@@ -1,5 +1,6 @@
 package com.happyshop.service;
 
+import com.happyshop.common.EasyUiTreeResponse;
 import com.happyshop.common.ServerResponse;
 import com.happyshop.pojo.Category;
 
@@ -14,7 +15,7 @@ public interface ICategoryService {
 
     ServerResponse<String> updateCategoryName(Integer categoryId,String categoryName);
 
-    ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId);
+    List<EasyUiTreeResponse> getChildrenParallelCategory(Integer categoryId);
 
     ServerResponse<List<Integer>> selectCategoryAndChildrenById(Integer categoryId);
 }

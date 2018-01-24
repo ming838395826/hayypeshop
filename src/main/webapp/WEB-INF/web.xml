@@ -49,6 +49,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <!-- 拦截所有请求jsp除外 -->
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 </web-app>
